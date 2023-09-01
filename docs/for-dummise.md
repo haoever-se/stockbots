@@ -1,7 +1,7 @@
 # for Dummies
 
 - [Convention and Guides](#convention-and-guides)
-- [Install Python](#install-nodejs-and-yarn)
+- [Install Python](#install-python)
 
 ## Convention and Guides
 
