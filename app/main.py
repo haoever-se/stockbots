@@ -72,7 +72,6 @@ def do_slack_check(form_data):
             channel=channel_id,
             blocks=message_blocks
         )
-        logger.debug("Message posted to Slack")
         return "Message posted to Slack"
     except SlackApiError as e:
         error_message = f"Error posting message to Slack: {e.response['error']}"
