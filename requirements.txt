@@ -1,2 +1,35 @@
 flask == 2.3.3
 pylint == 3.0.2
+
+aiohttp==3.8.1
+aiosignal==1.3.1
+astroid==3.0.1
+async-timeout==4.0.3
+attrs==23.1.0
+blinker==1.7.0
+certifi==2023.7.22
+chardet==3.0.4
+charset-normalizer==2.1.1
+click==8.1.7
+dill==0.3.7
+frozenlist==1.3.1
+idna==3.4
+isort==5.12.0
+itsdangerous==2.1.2
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+mccabe==0.7.0
+multidict==4.7.6
+platformdirs==3.11.0
+requests==2.31.0
+slack-sdk==3.23.0
+tomli==2.0.1
+tomlkit==0.12.2
+typing_extensions==4.8.0
+urllib3==2.0.7
+Werkzeug==3.0.1
+yarl==1.8.1
+flask-marshmallow==0.15.0
+Flask-SQLAlchemy==3.1.1
+marshmallow==3.20.1
+SQLAlchemy==2.0.23
