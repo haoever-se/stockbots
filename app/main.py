@@ -1,7 +1,7 @@
 """Entry point of the server"""
 from flask import Flask
-from db import db, setup_database
-from slack import slack_blueprint
+from app.db import db, setup_database
+from app.slack import slack_blueprint
 
 app = Flask(__name__)
 # Setup database
