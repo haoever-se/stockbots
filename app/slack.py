@@ -4,9 +4,10 @@ import json
 import logging
 import requests
 from flask import Blueprint, request
-from app.db import db, Symbol, symbols_schema
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
+from app.db import db, Symbol, symbols_schema
+
 
 
 slack_blueprint = Blueprint('slack', __name__)
