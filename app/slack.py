@@ -6,11 +6,12 @@ import requests
 from flask import Blueprint, request
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
+from dotenv import load_dotenv
 from app.db import db, Symbol, symbols_schema
 
 
-
 slack_blueprint = Blueprint('slack', __name__)
+load_dotenv()
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
