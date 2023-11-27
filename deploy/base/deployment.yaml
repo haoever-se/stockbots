@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stockbots
+  namespace: stockbots-dev
+  labels:
+    app: stockbots
+spec:
+  terminationGracePeriodSeconds: 30
+  containers:
+    - name: stockbots
+      image: ntueeboy/stockbots:latest
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 5000
+          name: stockbots-svc
+      env:
+        - name: CHANNEL
+          valueFrom:
+            secretKeyRef:
+              name: stockbots-key
+              key: channel
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: stockbots-key
+              key: alphavantage
+        - name: TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: stockbots-key
+              key: howhowone

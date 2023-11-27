@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: stockbots-ingress
+  namespace: stockbots-dev
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+
+spec:
+  rules:
+    - host: example.discovery.cs.vt.edu
+      http:
+        paths:
+          - backend:
+              serviceName: stockbots-service
+              servicePort: 80
+            path: /stockbots(/|$)(.*)
