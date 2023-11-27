@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stockbots
+  namespace: stockbots-dev
+  labels:
+    app: stockbots
+spec:
+  containers:
+    - name: stockbots
+      image: ntueeboy/stockbots:latest
+      ports:
+        - containerPort: 5000
+          name: stockbots-svc
+      env:
+        - name: TOKEN
+          value: xoxb-5792894905632-5828830700274-7WJC69pCx7y7ZAKj4sZxfLM7
+        - name: CHANNEL
+          value: C05QF6JLRUL
+        - name: API_KEY
+          value: 2KAODLIYZ8Q8M5UZ
