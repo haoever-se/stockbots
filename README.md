@@ -23,3 +23,17 @@ $ pip3 install -r requirements.txt
 ```bash
 $ flask --app ./app/main.py run
 ```
+
+## Setup db for the app
+
+```bash
+$ export FLASK_APP=app.main
+$ flask db_drop
+$ flask db_create
+```
+
+## Test the app
+
+```bash
+$ python3 -m unittest discover -s test
+```
