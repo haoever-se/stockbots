@@ -1,11 +1,27 @@
-name: Deploy the app
+name: Test and deploy the app
 
 on:
-  push:
   pull_request:
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run test
+        uses: actions/setup-python@v4
+        with:
+          python-version: "pypy3.9"
+      - run: |
+          pip3 install -r requirements.txt
+          python3 -m unittest discover -s test
+        env:
+          TOKEN: ${{ secrets.BOT_TOKEN }}
+          API_KEY: ${{ secrets.API_KEY }}
+          CHANNEL: ${{ secrets.CHANNEL }}
   build:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
