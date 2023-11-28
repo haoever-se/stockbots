@@ -6,16 +6,27 @@ metadata:
   labels:
     app: stockbots
 spec:
+  terminationGracePeriodSeconds: 30
   containers:
     - name: stockbots
       image: ntueeboy/stockbots:latest
+      imagePullPolicy: Always
       ports:
         - containerPort: 5000
           name: stockbots-svc
       env:
-        - name: TOKEN
-          value: xoxb-5792894905632-5828830700274-7WJC69pCx7y7ZAKj4sZxfLM7
         - name: CHANNEL
-          value: C05QF6JLRUL
+          valueFrom:
+            secretKeyRef:
+              name: stockbots-key
+              key: channel
         - name: API_KEY
-          value: 2KAODLIYZ8Q8M5UZ
+          valueFrom:
+            secretKeyRef:
+              name: stockbots-key
+              key: alphavantage
+        - name: TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: stockbots-key
+              key: howhowone
