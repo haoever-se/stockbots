@@ -6,6 +6,7 @@ from app.db import db, Symbol
 
 class SlackTestCase(unittest.TestCase):
     """Testing slack features"""
+
     def setUp(self):
         """Set up the app for testing"""
         self.app = app.test_client()
@@ -25,12 +26,6 @@ class SlackTestCase(unittest.TestCase):
             db.session.rollback()
             db.session.remove()
 
-    def test_slack_get_all(self):
-        """Testing API slack_get_all"""
-        response = self.app.post('/slack/getAll')
-        # assert that the post request was successful
-        self.assertEqual(response.status_code, 200)
-
     def test_slack_add(self):
         """Testing API slack_add"""
         response = self.app.post('/slack/add', data={'text': 'NVDA'})
@@ -42,6 +37,20 @@ class SlackTestCase(unittest.TestCase):
             symbol = Symbol.query.filter_by(symbol='NVDA').first()
         self.assertIsNotNone(symbol, "Symbol 'NVDA' should be added to the database.")
         self.assertEqual(symbol.symbol, 'NVDA', "The symbol should be 'NVDA'.")
+
+    def test_slack_get_db(self):
+        """Testing API slack_get_all"""
+        response = self.app.post('/slack/getDb')
+        # assert that the post request was successful
+        self.assertEqual(response.status_code, 200)
+
+    def test_slack_get_all(self):
+        """Testing API slack_check"""
+        response = self.app.post('/slack/getAll')
+        # assert that the post request was successful
+        self.assertEqual(response.status_code, 200)
+        # Load the response data
+        self.assertIn('Message posted to Slack', response.text, "Message should be sent to Slack")
 
     def test_slack_check(self):
         """Testing API slack_check"""
