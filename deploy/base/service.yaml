@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stockbots-service
+  namespace: stockbots-dev
+spec:
+  ports:
+    - name: tcp
+      port: 80
+      protocol: TCP
+      targetPort: stockbots-svc
+  selector:
+    app: stockbots
+  type: ClusterIP
