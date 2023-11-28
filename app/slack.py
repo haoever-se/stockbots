@@ -9,21 +9,12 @@ from slack_sdk.errors import SlackApiError
 from dotenv import load_dotenv
 from app.db import db, Symbol, symbols_schema
 
-
 slack_blueprint = Blueprint('slack', __name__)
 load_dotenv()
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-@slack_blueprint.route('/slack/getAll', methods=['POST'])
-def slack_get_all():
-    """Get all symbol in database"""
-    symbol_list = Symbol.query.all()
-    result = symbols_schema.dump(symbol_list)
-    return result
 
 
 @slack_blueprint.route('/slack/add', methods=['POST'])
@@ -40,28 +31,50 @@ def slack_add():
     return 'symbol added successfully!', 201
 
 
-@slack_blueprint.route('/slack/check', methods=['POST'])
-def slack_check():
-    """Endpoint to check stock price from a Slack command."""
+@slack_blueprint.route('/slack/getDb', methods=['POST'])
+def slack_get_db():
+    """Get all symbol in database"""
+    symbol_list = Symbol.query.all()
+    result = symbols_schema.dump(symbol_list)
+    return result
+
+
+@slack_blueprint.route('/slack/getAll', methods=['POST'])
+def slack_get_all():
+    """Get all symbol in database then send message to Slack"""
+    symbol_list = Symbol.query.all()
     try:
-        return do_slack_check(request.form)
+        for data in symbol_list:
+            do_slack_check(data.symbol)
+        return "Message posted to Slack"
     # pylint: disable=W0718
     except Exception as e:
         logger.error(str(e), exc_info=True)
         return "Something went wrong!", 500
 
 
-def do_slack_check(form_data):
+@slack_blueprint.route('/slack/check', methods=['POST'])
+def slack_check():
+    """Endpoint to check stock price from a Slack command."""
+    try:
+        do_slack_check(request.form.get('text'))
+        return "Message posted to Slack"
+    # pylint: disable=W0718
+    except Exception as e:
+        logger.error(str(e), exc_info=True)
+        return "Something went wrong!", 500
+
+
+def do_slack_check(symbol):
     """Process the /slack/check command."""
     api_key = os.environ.get('API_KEY')
     token = os.environ.get('TOKEN')
     channel_id = os.environ.get('CHANNEL')
 
-    stock = form_data.get('text')
     url = (f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="
-           f"{stock}&apikey={api_key}")
+           f"{symbol}&apikey={api_key}")
 
-    logger.debug("StockPriceQueryController request: %s", form_data)
+    logger.debug("Stock Symbol: %s", symbol)
     response = requests.get(url, timeout=10)
     response.raise_for_status()
     resp = response.text
@@ -75,7 +88,7 @@ def do_slack_check(form_data):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"*{last_date} {stock}*:\n"
+                "text": f"*{last_date} {symbol}*:\n"
                         f"`Open price`: {target['1. open']}\n"
                         f"`Highest price`: {target['2. high']}\n"
                         f"`Lowest price`: {target['3. low']}\n"
@@ -91,8 +104,6 @@ def do_slack_check(form_data):
             channel=channel_id,
             blocks=message_blocks
         )
-        return "Message posted to Slack"
     except SlackApiError as e:
         error_message = f"Error posting message to Slack: {e.response['error']}"
         logger.error("Slack API error: %s", error_message)
-        return error_message
