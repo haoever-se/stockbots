@@ -88,7 +88,7 @@ def do_slack_check(symbol):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"*{last_date} {symbol}*:\n"
+                "text": f"*{last_date} {symbol}*: :blob-party:\n"
                         f"`Open price`: {target['1. open']}\n"
                         f"`Highest price`: {target['2. high']}\n"
                         f"`Lowest price`: {target['3. low']}\n"
