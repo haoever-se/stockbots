@@ -12,11 +12,11 @@ from slack_sdk.errors import SlackApiError
 slack_blueprint = Blueprint('slack', __name__)
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-@slack_blueprint.route('/slack/getAll', methods=['POST'])
+@slack_blueprint.route('/slack/getAll', methods=['GET'])
 def slack_get_all():
     """Get all symbol in database"""
     symbol_list = Symbol.query.all()
@@ -38,7 +38,7 @@ def slack_add():
     return 'symbol added successfully!', 201
 
 
-@slack_blueprint.route('/slack/check', methods=['POST'])
+@slack_blueprint.route('/slack/check', methods=['GET'])
 def slack_check():
     """Endpoint to check stock price from a Slack command."""
     try:
